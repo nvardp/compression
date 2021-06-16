@@ -25,9 +25,9 @@ private:
 	void save_to_file(const std::string&);
 
 private:
-	std::string filename;
-	counter_struct obj;
-	Data result;
+	std::string m_filename;
+	counter_struct m_obj;
+	Data m_result;
 };
 
 

@@ -4,26 +4,26 @@
 #include <string>
 #include "compress.h"
 
-Compress::Compress(std::string other) : filename(std::move(other)) {	}
+Compress::Compress(std::string other) : m_filename(std::move(other)) {	}
 
 	void Compress::compress()
 	{
 		std::string a = open_and_read_file();
 		CompressionString(a);
-		save_to_file("compressed_" + filename);
+		save_to_file("compressed_" + m_filename);
 	}
 
 	void Compress::decompress()
 	{
 		std::string a = open_and_read_file();
 		DecompressionString(a);
-		std::cout << "File saved to decompressed_" + filename<<std::endl;
+		std::cout << "File saved to decompressed_" + m_filename<<std::endl;
 	}
 
 	std::string Compress::open_and_read_file() const
 	{
 		std::fstream file;
-		file.open(filename);
+		file.open(m_filename);
 		std::string tmp{};
 		std::string sresult{};
 		std::cout << "reading file..." << std::endl;
@@ -38,7 +38,7 @@ Compress::Compress(std::string other) : filename(std::move(other)) {	}
 	{
 		unsigned int current = 0;
 		std::cout << "decompressing file..." << std::endl;
-		std::ofstream MyFile("decompressed_"+filename);
+		std::ofstream MyFile("decompressed_"+ m_filename);
 		do
 		{
 			std::string tmp{};
@@ -71,30 +71,30 @@ Compress::Data Compress::CompressionString(const std::string& str)
 		{
 			if (str[current] == str[current + 1])
 			{
-				++obj.counter;
+				++m_obj.counter;
 			}
 			else {
-				obj.letter = str[current];
-				result.push_back(obj);
-				obj.counter = 1;
+				m_obj.letter = str[current];
+				m_result.push_back(m_obj);
+				m_obj.counter = 1;
 			}
 			++current;
 		} while (str[current] != '\0');
-		return result;
+		return m_result;
 	}
 
 	void Compress::save_to_file(const std::string& other)
 	{
 		std::ofstream MyFile(other);
-		for (int i = 0; i < result.size(); i++)
+		for (int i = 0; i < m_result.size(); i++)
 		{
-			if (result[i].counter == 1)
-				MyFile << result[i].letter;
-			else if (result[i].counter == 2)
-				MyFile << result[i].letter << result[i].letter;
+			if (m_result[i].counter == 1)
+				MyFile << m_result[i].letter;
+			else if (m_result[i].counter == 2)
+				MyFile << m_result[i].letter << m_result[i].letter;
 			else
-				MyFile << result[i].counter << result[i].letter;
+				MyFile << m_result[i].counter << m_result[i].letter;
 		}
-		std::cout << "saved to compressed_" + filename;
+		std::cout << "saved to compressed_" + m_filename;
 	}
 
